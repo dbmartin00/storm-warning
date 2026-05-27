@@ -1,0 +1,83 @@
+# Storm Warning Console Application
+
+A .NET 8.0 console application that displays weather conditions from a Harness FME feature flag.
+
+## Features
+
+- Animated welcome screen with ASCII art clouds and snow
+- Clouds and snow drift across the screen every 5 seconds
+- Weather conditions display from Harness FME feature flag `storm_warning`
+- Interactive refresh on Enter key press
+- Random user targeting for each evaluation
+- Graceful error handling with fallback defaults
+
+## Prerequisites
+
+- .NET 8.0 SDK
+- Harness Feature Flags account with access to the `storm_warning` flag
+- Harness Server SDK API key
+
+## Setup
+
+1. Set your Harness API key as an environment variable:
+   ```bash
+   export FF_API_KEY="your-api-key-here"
+   ```
+
+2. Build the application:
+   ```bash
+   dotnet build
+   ```
+
+3. Run the application:
+   ```bash
+   dotnet run
+   ```
+
+## Feature Flag Configuration
+
+The `storm_warning` flag should be configured in Harness with JSON variations containing:
+
+```json
+{
+  "headline": "Weather Condition Title",
+  "details": "Detailed weather description"
+}
+```
+
+### Example Treatments
+
+- **calm**: `{"headline": "Clear Skies", "details": "Perfect weather conditions"}`
+- **fog**: `{"headline": "Foggy Conditions", "details": "Reduced visibility expected"}`
+- **rain**: `{"headline": "Rainy Day", "details": "Bring an umbrella"}`
+- **sleet**: `{"headline": "Sleet Warning", "details": "Icy precipitation possible"}`
+- **snow**: `{"headline": "Snow Alert", "details": "Winter weather advisory"}`
+
+## Usage
+
+1. Launch the application
+2. View the welcome screen and press Enter
+3. View the current weather conditions
+4. Press Enter to refresh and fetch new weather data
+5. Each refresh generates a new random user identifier for flag evaluation
+
+## Dependencies
+
+- `Splitio-net-core` (v6.2.3) - Split.io SDK (used by Harness FME)
+- `Spectre.Console` (v0.55.2) - Rich console UI framework
+- `Newtonsoft.Json` (v13.0.4) - JSON handling
+
+## Architecture
+
+- **Program.cs** - Application entry point and main loop
+- **WeatherService.cs** - Split.io SDK integration and flag evaluation using `GetTreatmentWithConfig`
+- **ConsoleUI.cs** - Spectre.Console UI rendering
+- **Models/WeatherConfig.cs** - Weather data model
+
+## Technical Details
+
+The application uses the Split.io .NET SDK which powers Harness Feature Management & Experimentation. The SDK:
+- Initializes with `BlockUntilReady(10000)` for a 10-second timeout
+- Evaluates feature flags using `GetTreatmentWithConfig()` which returns both treatment name and configuration JSON
+- Uses CDN-based evaluation (default configuration)
+- Generates a random user ID for each evaluation to test different targeting rules
