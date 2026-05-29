@@ -134,8 +134,12 @@ public static class ConsoleUI
 
         mainLayout["title"].Update(Align.Center(titlePanel));
 
+        var weatherArt = WeatherArt.GetWeatherArt(weather.Treatment);
+        var artColor = WeatherArt.GetColorForWeatherType(weather.Treatment);
+        var escapedArt = weatherArt.Replace("[", "[[").Replace("]", "]]");
+
         var weatherPanel = new Panel(
-            new Markup($"[bold yellow]{weather.Headline}[/]\n\n{weather.Details}")
+            new Markup($"[bold yellow]{weather.Headline}[/]\n\n{weather.Details}\n\n[{artColor}]{escapedArt}[/]")
         )
         {
             Border = BoxBorder.Rounded,

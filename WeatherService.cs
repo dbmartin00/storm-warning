@@ -55,6 +55,7 @@ public class WeatherService : IDisposable
                 var config = JsonConvert.DeserializeObject<WeatherConfig>(result.Config);
                 if (config != null)
                 {
+                    config.Treatment = treatment;
                     return config;
                 }
             }
@@ -62,7 +63,8 @@ public class WeatherService : IDisposable
             return new WeatherConfig
             {
                 Headline = "Weather Unavailable",
-                Details = $"Treatment: {treatment}, no config available"
+                Details = $"Treatment: {treatment}, no config available",
+                Treatment = treatment
             };
         }
         catch (Exception ex)
